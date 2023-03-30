@@ -3,7 +3,7 @@
 Plugin Name: DB Robots.txt 
 Plugin URI: http://seogio.ru
 Description: The plugin makes a virtual file robots.txt good for both Google and Yandex, and gives suggestions how to make the correct settings.
-Version: 2.3
+Version: 3.0
 Author: Denis Bisteinov
 Author URI: http://seogio.ru
 License: GPL2
@@ -24,6 +24,17 @@ License: GPL2
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
+	add_option('db_robots_custom');
+
+	add_action( 'admin_enqueue_scripts', function() {
+					wp_register_style('db-robotstxt-admin', '/wp-content/plugins/db-robotstxt/css/admin.css');
+					wp_enqueue_style( 'db-robotstxt-admin' );
+				},
+				99
+	);
+
+
 
 	function publish_robots_txt() {
 
@@ -84,15 +95,19 @@ License: GPL2
 
 		$default_robots = '';
 
-		foreach ($db_rules as $db_rules_category) {
+		foreach ($db_rules as $db_rules_category => $db_rules_categories) {
 
-			foreach ($db_rules_category as $db_rules) {
+			foreach ($db_rules_categories as $key => $db_rules) {
 
 				$default_robots .= "{$db_rules_category}: {$db_rules}\n";
 
 			}
 
+			$default_robots .= "\n";
+
 		}
+
+		$default_robots .= get_option('db_robots_custom') . "\n";
 
 		$output = "# This virtual robots.txt file was created by DB Robots.txt WordPress plugin: \n# https://www.wordpress.org/plugins/bisteinoff-robots-txt/\n\n";
 		$output .= "User-agent: *\n\n";
@@ -148,3 +163,34 @@ License: GPL2
 
 	remove_action( 'do_robots', 'do_robots' );
 	add_action( 'do_robots', 'publish_robots_txt' );
+
+
+
+	function db_robots_admin()
+	{
+
+		if ( function_exists('add_options_page') )
+		{
+
+			add_options_page(
+				'DB Robots.txt Settings',
+				'DB Robots.txt',
+				'manage_options',
+				'db-robotstxt',
+				'db_robotstxt_admin_settings'
+			);
+
+		}
+
+	}
+
+	add_action( 'admin_menu', 'db_robots_admin' );
+
+
+
+	function db_robotstxt_admin_settings()
+	{
+
+		require_once('inc/settings.php');
+
+	}

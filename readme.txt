@@ -35,6 +35,9 @@ Out of the box, no. Because WordPress is in a sub-folder, it won't "know" when s
 
 == Changelog ==
 
+= 3.0 =
+* Added a settings page in admin panel for custom rules
+
 = 2.3 =
 * Tested with WordPress 6.2.
 * The code is optimized
