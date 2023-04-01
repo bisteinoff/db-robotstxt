@@ -35,6 +35,11 @@ Out of the box, no. Because WordPress is in a sub-folder, it won't "know" when s
 
 == Changelog ==
 
+= 3.1 =
+* New basic regular rules for Googlebot and Yandex
+* Now more possibilities to manage your robots.txt: you can add custom rules for Googlebot, Yandex and other User-agents
+* More information about your robots.txt on the settings page
+
 = 3.0 =
 * Added a settings page in admin panel for custom rules
 

@@ -1,5 +1,19 @@
 /* DB Robotstxt Admin Panel */
 
+.db-rbt-admin .form-table {
+    width: 100%;
+}
+
+.db-rbt-admin .form-table th,
+.db-rbt-admin .form-table td {
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+}
+
+.db-rbt-admin .form-table td textarea {
+    margin: 15px 0;
+}
+
 .td-rbt-field-description {
     font-size: .9em;
     font-style: italic;

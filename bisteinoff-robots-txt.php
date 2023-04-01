@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: DB Robots.txt 
-Plugin URI: http://seogio.ru
+Plugin URI: https://github.com/bisteinoff/db-robotstxt
 Description: The plugin makes a virtual file robots.txt good for both Google and Yandex, and gives suggestions how to make the correct settings.
-Version: 3.0
+Version: 3.1
 Author: Denis Bisteinov
-Author URI: http://seogio.ru
+Author URI: https://bisteinoff.com/
 License: GPL2
 */
 
@@ -26,6 +26,9 @@ License: GPL2
 */
 
 	add_option('db_robots_custom');
+	add_option('db_robots_custom_google');
+	add_option('db_robots_custom_yandex');
+	add_option('db_robots_custom_other');
 
 	add_action( 'admin_enqueue_scripts', function() {
 					wp_register_style('db-robotstxt-admin', '/wp-content/plugins/db-robotstxt/css/admin.css');
@@ -38,7 +41,9 @@ License: GPL2
 
 	function publish_robots_txt() {
 
-		// The list of rules for robots.txt
+		// BASIC VARIABLES
+
+		// Basic rules for all user-agents
 
 		$db_rules = array(
 
@@ -91,29 +96,110 @@ License: GPL2
 			)
 		);
 
-		// Making the contents for robots.txt
-
-		$default_robots = '';
+		$db_basic_rules = '';
 
 		foreach ($db_rules as $db_rules_category => $db_rules_categories) {
 
 			foreach ($db_rules_categories as $key => $db_rules) {
 
-				$default_robots .= "{$db_rules_category}: {$db_rules}\n";
+				$db_basic_rules .= "{$db_rules_category}: {$db_rules}\n";
 
 			}
 
-			$default_robots .= "\n";
+			$db_basic_rules .= "\n";
 
 		}
 
-		$default_robots .= get_option('db_robots_custom') . "\n";
 
-		$output = "# This virtual robots.txt file was created by DB Robots.txt WordPress plugin: \n# https://www.wordpress.org/plugins/bisteinoff-robots-txt/\n\n";
-		$output .= "User-agent: *\n\n";
-		$output .= $default_robots;
 
-		// checking the host
+		// Basic rules for Google
+
+		$db_rules = array(
+
+			'Disallow' => array (
+				'/feed/turbo',
+				'/feed/zen'
+			),
+			'Allow' => array (
+				'*/amp'
+			)
+		);
+
+		$db_basic_rules_google = '';
+
+		foreach ($db_rules as $db_rules_category => $db_rules_categories) {
+
+			foreach ($db_rules_categories as $key => $db_rules) {
+
+				$db_basic_rules_google .= "{$db_rules_category}: {$db_rules}\n";
+
+			}
+
+			$db_basic_rules_google .= "\n";
+
+		}
+
+
+
+		// Basic rules for Yandex
+
+		$db_rules = array(
+
+			'Disallow' => array (
+				'*/amp'
+			),
+			'Allow' => array (
+				'/feed/turbo',
+				'/feed/zen'
+			)
+		);
+
+		$db_basic_rules_yandex = '';
+
+		foreach ($db_rules as $db_rules_category => $db_rules_categories) {
+
+			foreach ($db_rules_categories as $key => $db_rules) {
+
+				$db_basic_rules_yandex .= "{$db_rules_category}: {$db_rules}\n";
+
+			}
+
+			$db_basic_rules_yandex .= "\n";
+
+		}
+
+
+
+		// ROBOTS.TXT
+
+		// User-agent: *
+
+		$db_robots = "# This virtual robots.txt file was created by DB Robots.txt WordPress plugin: \n# https://www.wordpress.org/plugins/bisteinoff-robots-txt/";
+		$db_robots .= "\n\n\nUser-agent: *\n\n";
+		$db_robots .= $db_basic_rules;
+		$db_robots .= preg_replace('/&amp;/', '&', get_option('db_robots_custom') ) . "\n";
+
+		// User-agent: GoogleBot
+
+		$db_robots .= "\n\n\nUser-agent: GoogleBot\n\n";
+		$db_robots .= $db_basic_rules . $db_basic_rules_google;
+		$db_robots .= preg_replace('/&amp;/', '&', get_option('db_robots_custom_google') ) . "\n";
+
+		// User-agent: Yandex
+
+		$db_robots .= "\n\n\nUser-agent: Yandex\n\n";
+		$db_robots .= $db_basic_rules . $db_basic_rules_yandex;
+		$db_robots .= preg_replace('/&amp;/', '&', get_option('db_robots_custom_yandex') ) . "\n";
+
+		// Other
+		$db_robots .= "\n\n\n" . preg_replace('/&amp;/', '&', get_option('db_robots_custom_other') ) . "\n";
+
+
+
+		// SITEMAP
+
+		// Checking the host
+
 		if ( ( !empty($_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] != 'off' ) || $_SERVER['SERVER_PORT'] == 443 ) {
 			$protocol = 'https://';
 			$host = 'https://'.$_SERVER['HTTP_HOST'];
@@ -150,13 +236,15 @@ License: GPL2
 
 		}
 
-		$output .= $sitemap;
+		if ( !empty ($sitemap) )
+			$db_robots .= "\n\n\n" . $sitemap;
 
-		$output = stripcslashes($output);
+
+		$db_robots = stripcslashes($db_robots);
 
 		header('Status: 200 OK', true, 200);
 		header('Content-type: text/plain; charset=' . get_bloginfo('charset'));
-		echo $output;
+		echo $db_robots;
 		exit; 
 
 	} // end function
