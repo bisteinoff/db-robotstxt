@@ -2,6 +2,7 @@
 
 	$custom_rules = get_option('db_robots_custom');
 	$custom_rules_google = get_option('db_robots_custom_google');
+	$if_yandex = get_option('db_robots_if_yandex');
 	$custom_rules_yandex = get_option('db_robots_custom_yandex');
 	$custom_rules_other = get_option('db_robots_custom_other');
 
@@ -17,10 +18,12 @@
 
 		$custom_rules = esc_html($_POST['custom_rules']);
 		$custom_rules_google = esc_html($_POST['custom_rules_google']);
+		$if_yandex = esc_html($_POST['if_yandex']);
 		$custom_rules_yandex = esc_html($_POST['custom_rules_yandex']);
 		$custom_rules_other = esc_html($_POST['custom_rules_other']);
 		update_option('db_robots_custom', $custom_rules);
 		update_option('db_robots_custom_google', $custom_rules_google);
+		update_option('db_robots_if_yandex', $if_yandex);
 		update_option('db_robots_custom_yandex', $custom_rules_yandex);
 		update_option('db_robots_custom_other', $custom_rules_other);
 
@@ -32,9 +35,16 @@
 
 	<h1><?php _e('DB Robots.txt', 'robotstxt'); ?></h1>
 
+	<div class="db-rbt-description">
+		<p><?php _e("DB Robots.txt automatically creates a virtual file robots.txt including special rules for Google and Yandex.", 'robotstxt') ?></p>
+		<p><?php _e("You can also add custom rules for Google, Yandex and any other robots or disable Yandex if you don't need it for search engines optimisation.", 'robotstxt') ?></p>
+	</div>
+
 	<h2><?php _e('Link', 'robotstxt'); ?></h2>
 
-	<p><?php _e('You will find the file here:', 'robotstxt'); ?> <a href="/robots.txt" title="robots.txt"><?php echo site_url() ?>/robots.txt</a></p>
+	<div class="db-rbt-link">
+		<p><?php _e('You will find the file here:', 'robotstxt'); ?> <a href="/robots.txt" title="robots.txt"><?php echo site_url() ?>/robots.txt</a></p>
+	</div>
 
 	<h2><?php _e('Settings', 'robotstxt'); ?></h2>
 
@@ -104,7 +114,7 @@
 					<p class="td-rbt-field-description"><?php _e('Add custom rules into your file robots.txt. They will appear in the block "User-agent: *" after the basic directives Disallow and Allow.' , 'robotstxt') ?></p>
 				</th>
 				<td>
-					<textarea id="custom_rules" name="custom_rules" rows="13" cols="100"><?php echo $custom_rules; ?></textarea>
+					<textarea id="custom_rules" name="custom_rules" rows="13" cols="100"><?php echo strip_tags($custom_rules); ?></textarea>
 				</td>
 			</tr>
 			<tr valign="top">
@@ -124,7 +134,16 @@
 					<p class="td-rbt-field-description"><?php _e('Add custom rules into your file robots.txt. They will appear in the block "User-agent: Googlebot" after the basic directives Disallow and Allow.' , 'robotstxt') ?></p>
 				</th>
 				<td>
-					<textarea id="custom_rules_google" name="custom_rules_google" rows="13" cols="100"><?php echo $custom_rules_google; ?></textarea>
+					<textarea id="custom_rules_google" name="custom_rules_google" rows="13" cols="100"><?php echo strip_tags($custom_rules_google); ?></textarea>
+				</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row" class="db-rbt-custom">
+					<p><?php _e('Enable special rules for Yandex') ?></p>
+					<p class="td-rbt-field-description"><?php _e('You can disable the rules if the region of your website is not Russia, Belorussia, Kazakhstan or Ukraine where many people use Yandex as a search engine' , 'robotstxt') ?></p>
+				</th>
+				<td>
+					<input type="checkbox" id="if_yandex" name="if_yandex" <?php if ( $if_yandex === 'on') { ?>checked<?php } ?> >
 				</td>
 			</tr>
 			<tr valign="top">
@@ -144,7 +163,7 @@
 					<p class="td-rbt-field-description"><?php _e('Add custom rules into your file robots.txt. They will appear in the block "User-agent: Yandex" after the basic directives Disallow and Allow.' , 'robotstxt') ?></p>
 				</th>
 				<td>
-					<textarea id="custom_rules_yandex" name="custom_rules_yandex" rows="13" cols="100"><?php echo $custom_rules_yandex; ?></textarea>
+					<textarea id="custom_rules_yandex" name="custom_rules_yandex" rows="13" cols="100"><?php echo strip_tags($custom_rules_yandex); ?></textarea>
 				</td>
 			</tr>
 			<tr valign="top">
@@ -153,7 +172,7 @@
 					<p class="td-rbt-field-description"><?php _e('Add custom rules into your file robots.txt. They will appear at the end of the file before Sitemap. Here you can add other necessary directives.' , 'robotstxt') ?></p>
 				</th>
 				<td>
-					<textarea id="custom_rules_other" name="custom_rules_other" rows="13" cols="100"><?php echo $custom_rules_other; ?></textarea>
+					<textarea id="custom_rules_other" name="custom_rules_other" rows="13" cols="100"><?php echo strip_tags($custom_rules_other); ?></textarea>
 				</td>
 			</tr>
 		</table>

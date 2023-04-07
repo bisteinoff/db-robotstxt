@@ -3,7 +3,7 @@
 Plugin Name: DB Robots.txt 
 Plugin URI: https://github.com/bisteinoff/db-robotstxt
 Description: The plugin makes a virtual file robots.txt good for both Google and Yandex, and gives suggestions how to make the correct settings.
-Version: 3.1
+Version: 3.2
 Author: Denis Bisteinov
 Author URI: https://bisteinoff.com/
 License: GPL2
@@ -27,11 +27,12 @@ License: GPL2
 
 	add_option('db_robots_custom');
 	add_option('db_robots_custom_google');
+	add_option('db_robots_if_yandex', 'on');
 	add_option('db_robots_custom_yandex');
 	add_option('db_robots_custom_other');
 
 	add_action( 'admin_enqueue_scripts', function() {
-					wp_register_style('db-robotstxt-admin', '/wp-content/plugins/db-robotstxt/css/admin.css');
+					wp_register_style('db-robotstxt-admin', '/wp-content/plugins/db-robotstxt/css/admin.min.css');
 					wp_enqueue_style( 'db-robotstxt-admin' );
 				},
 				99
@@ -177,22 +178,28 @@ License: GPL2
 		$db_robots = "# This virtual robots.txt file was created by DB Robots.txt WordPress plugin: \n# https://www.wordpress.org/plugins/bisteinoff-robots-txt/";
 		$db_robots .= "\n\n\nUser-agent: *\n\n";
 		$db_robots .= $db_basic_rules;
-		$db_robots .= preg_replace('/&amp;/', '&', get_option('db_robots_custom') ) . "\n";
+		if ( !empty ( $db_robots_custom = get_option('db_robots_custom') ) )
+			$db_robots .= preg_replace('/&amp;/', '&', $db_robots_custom ) . "\n";
 
 		// User-agent: GoogleBot
 
 		$db_robots .= "\n\n\nUser-agent: GoogleBot\n\n";
 		$db_robots .= $db_basic_rules . $db_basic_rules_google;
-		$db_robots .= preg_replace('/&amp;/', '&', get_option('db_robots_custom_google') ) . "\n";
+		if ( !empty ( $db_robots_custom_google = get_option('db_robots_custom_google') ) )
+			$db_robots .= preg_replace('/&amp;/', '&', $db_robots_custom_google ) . "\n";
 
 		// User-agent: Yandex
 
-		$db_robots .= "\n\n\nUser-agent: Yandex\n\n";
-		$db_robots .= $db_basic_rules . $db_basic_rules_yandex;
-		$db_robots .= preg_replace('/&amp;/', '&', get_option('db_robots_custom_yandex') ) . "\n";
+		if ( get_option('db_robots_if_yandex') === 'on' ) {
+			$db_robots .= "\n\n\nUser-agent: Yandex\n\n";
+			$db_robots .= $db_basic_rules . $db_basic_rules_yandex;
+			if ( !empty ( $db_robots_custom_yandex = get_option('db_robots_custom_yandex') ) )
+				$db_robots .= preg_replace('/&amp;/', '&', $db_robots_custom_yandex ) . "\n";
+		}
 
 		// Other
-		$db_robots .= "\n\n\n" . preg_replace('/&amp;/', '&', get_option('db_robots_custom_other') ) . "\n";
+		if ( !empty ( $db_robots_custom_other = get_option('db_robots_custom_other') ) )
+			$db_robots .= "\n\n\n" . preg_replace('/&amp;/', '&', $db_robots_custom_other ) . "\n";
 
 
 
@@ -200,9 +207,9 @@ License: GPL2
 
 		// Checking the host
 
-		if ( ( !empty($_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] != 'off' ) || $_SERVER['SERVER_PORT'] == 443 ) {
+		if ( ( !empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] != 'off' ) || $_SERVER['SERVER_PORT'] == 443 ) {
 			$protocol = 'https://';
-			$host = 'https://'.$_SERVER['HTTP_HOST'];
+			$host = 'https://' . $_SERVER['HTTP_HOST'];
 		}
 		else { 
 			$protocol = 'http://';
@@ -280,5 +287,29 @@ License: GPL2
 	{
 
 		require_once('inc/settings.php');
+
+	}
+
+
+
+	add_filter( 'plugin_action_links_db-robotstxt/bisteinoff-robots-txt.php', 'db_settings_link' );
+
+	function db_settings_link( $links )
+	{
+
+		$url = esc_url ( add_query_arg (
+			'page',
+			'db-robotstxt',
+			get_admin_url() . 'options-general.php'
+		) );
+
+		$settings_link = "<a href='$url'>" . __( 'Settings' ) . '</a>';
+
+		array_push(
+			$links,
+			$settings_link
+		);
+
+		return $links;
 
 	}

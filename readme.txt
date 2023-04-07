@@ -7,15 +7,13 @@ Tested up to: 6.2
 Stable tag: trunk
 License: GPL2
 
-DB Robots.txt automatically creates a virtual file robots.txt including special rules for Yandex.
+DB Robots.txt automatically creates a virtual file robots.txt including special rules for Google and Yandex. You can also add custom rules for Google, Yandex and any other robots or disable Yandex if you don't need it for search engines optimisation.
 
 == Description ==
 
 DB Robots.txt is an easy (i.e. automated) solution to creating and managing a robots.txt file for your site. It is easy to create a robots.txt without FTP access.
 
-If the plugin detects an existing XML sitemap file it will be included into robots.txt file.
-
-It automatically includes the host-rule for Yandex.
+If the plugin detects one or several Sitemap XML files it will include them into robots.txt file.
 
 == Installation ==
 
@@ -34,6 +32,10 @@ If a physical robots.txt file exists on your site, WordPress won't process any r
 Out of the box, no. Because WordPress is in a sub-folder, it won't "know" when someone is requesting the robots.txt file which must be at the root of the site.
 
 == Changelog ==
+
+= 3.2 =
+* New option to disable the rules for Yandex
+* Design of the Settings page in admin panel
 
 = 3.1 =
 * New basic regular rules for Googlebot and Yandex
