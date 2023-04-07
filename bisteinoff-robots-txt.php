@@ -2,8 +2,8 @@
 /*
 Plugin Name: DB Robots.txt 
 Plugin URI: https://github.com/bisteinoff/db-robotstxt
-Description: The plugin makes a virtual file robots.txt good for both Google and Yandex, and gives suggestions how to make the correct settings.
-Version: 3.2
+Description: The plugin automatically creates a virtual file robots.txt including special rules for Google and Yandex. You can also add custom rules for Google, Yandex and any other robots or disable Yandex if you don't need it for search engines optimisation
+Version: 3.3
 Author: Denis Bisteinov
 Author URI: https://bisteinoff.com/
 License: GPL2
@@ -175,7 +175,7 @@ License: GPL2
 
 		// User-agent: *
 
-		$db_robots = "# This virtual robots.txt file was created by DB Robots.txt WordPress plugin: \n# https://www.wordpress.org/plugins/bisteinoff-robots-txt/";
+		$db_robots = "# This virtual robots.txt file has been created with the DB Robots.txt WordPress plugin: \n# https://www.wordpress.org/plugins/bisteinoff-robots-txt/";
 		$db_robots .= "\n\n\nUser-agent: *\n\n";
 		$db_robots .= $db_basic_rules;
 		if ( !empty ( $db_robots_custom = get_option('db_robots_custom') ) )

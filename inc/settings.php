@@ -1,12 +1,43 @@
 <?php // THE SETTINGS PAGE
 
+	$db_self = get_admin_url() . 'options-general.php?page=db-robotstxt';
+	$db_link = $_SERVER['DOCUMENT_ROOT'] . '/robots.txt';
+
+	if ( isset( $_GET['action'] ) )
+	{
+
+		$db_action = esc_html( $_GET['action'] );
+
+		switch ( $db_action )
+		{
+			case 'rename': 
+				rename ( $db_link , $_SERVER['DOCUMENT_ROOT'] . '/robots_old.txt' );
+				wp_redirect ( $db_self . '&action=renamed' );
+				break;
+			case 'renamed': 
+				$db_renamed = true;
+				break;
+			case 'delete': 
+				wp_delete_file ( $db_link );
+				wp_redirect ( $db_self . '&action=deleted' );
+				break;
+			case 'deleted': 
+				$db_deleted = true;
+				break;
+			default: 
+				wp_redirect ( $db_self );
+				break;
+		}
+
+	}
+
 	$custom_rules = get_option('db_robots_custom');
 	$custom_rules_google = get_option('db_robots_custom_google');
 	$if_yandex = get_option('db_robots_if_yandex');
 	$custom_rules_yandex = get_option('db_robots_custom_yandex');
 	$custom_rules_other = get_option('db_robots_custom_other');
 
-	if ( isset($_POST['submit']) )
+	if ( isset( $_POST['submit'] ) )
 	{
 
 		if ( function_exists('current_user_can') &&
@@ -43,7 +74,7 @@
 	<h2><?php _e('Link', 'robotstxt'); ?></h2>
 
 	<div class="db-rbt-link">
-		<p><?php _e('You will find the file here:', 'robotstxt'); ?> <a href="/robots.txt" title="robots.txt"><?php echo site_url() ?>/robots.txt</a></p>
+		<p><?php _e('You will find the file here:', 'robotstxt'); ?> <a class="db-rbt-button" href="/robots.txt" title="robots.txt"><?php echo site_url() ?>/robots.txt</a></p>
 	</div>
 
 	<h2><?php _e('Settings', 'robotstxt'); ?></h2>
@@ -56,6 +87,46 @@
 		?>
 
 		<table class="form-table">
+			<?php
+				if ( file_exists ($db_link) ) {
+			?>
+			<tr valign="top">
+				<th scope="row" class="db-rbt-error">
+					<p><?php _e('Attention!' , 'robotstxt') ?> <?php _e('File robots.txt already exists' , 'robotstxt') ?></p>
+					<p class="td-rbt-field-description"><?php _e("If you want to replace it with the virtual file, you need to rename or delete the existing one" , 'robotstxt') ?></p>
+				</th>
+				<td class="db-rbt-error">
+					<a class="db-rbt-button" href="<?php echo $db_self ?>&action=rename">Rename to robots_old.txt</a>
+					<a class="db-rbt-button" href="<?php echo $db_self ?>&action=delete">Delete old robots.txt</a>
+				</td>
+			</tr>
+			<?php }
+
+				else
+				{
+					if ( $db_renamed ) {
+			?>
+			<tr valign="top">
+				<th colspan="2" scope="row" class="db-rbt-success">
+					<p>
+						<?php _e('File robots.txt has been sucessfully renamed. Now the virtual robots.txt works fine.' , 'robotstxt') ?>
+						<?php _e('You can find the old robots.txt' , 'robotstxt') ?>
+						<a href="/robots_old.txt" target="_blank"><?php _e('here' , 'robotstxt') ?></a>
+					</p>
+				</th>
+			</tr>
+			<?php } 
+
+					if ( $db_deleted ) {
+			?>
+			<tr valign="top">
+				<th colspan="2" scope="row" class="db-rbt-success">
+					<p><?php _e('File robots.txt has been sucessfully deleted. Now the virtual robots.txt works fine.' , 'robotstxt') ?></p>
+				</th>
+			</tr>
+			<?php }
+				}
+			?>
 			<tr valign="top">
 				<th scope="row" class="db-rbt-custom">
 					<p><?php _e('Regular basic rules') ?> <?php _e('for all search engines' , 'robotstxt') ?></p>

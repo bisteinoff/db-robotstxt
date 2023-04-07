@@ -1,7 +1,7 @@
 === DB Robots.txt ===
 Contributors: Denis Bisteinov
-Donate link: http://seogio.ru
-Tags: robots, robots.txt, robots txt, robot, crawler, google, yandex, bing, seo, search engings, indexing
+Donate link: https://bisteinoff.com
+Tags: robots, robots.txt, robots txt, robot, crawler, google, yandex, bing, seo, search engines, indexing
 Requires at least: 4.0
 Tested up to: 6.2
 Stable tag: trunk
@@ -32,6 +32,9 @@ If a physical robots.txt file exists on your site, WordPress won't process any r
 Out of the box, no. Because WordPress is in a sub-folder, it won't "know" when someone is requesting the robots.txt file which must be at the root of the site.
 
 == Changelog ==
+
+= 3.3 =
+* New options to rename or delete the existing robots.txt file
 
 = 3.2 =
 * New option to disable the rules for Yandex

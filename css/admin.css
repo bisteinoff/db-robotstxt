@@ -9,18 +9,7 @@
     margin-top: 2em;
 }
 
-.db-rbt-description p {
-    color: #525d65;
-    font-size: 1.5em;
-    margin: .5em 0;
-}
-
-.db-rbt-link p {
-    color: #525d65;
-    font-size: 1.5em;
-}
-
-.db-rbt-link a {
+a.db-rbt-button {
     border: 1px solid #2271b1;
     -webkit-border-radius: 25px;
     -moz-border-radius: 25px;
@@ -33,12 +22,31 @@
     white-space: nowrap;
 }
 
-.db-rbt-link a:active,
-.db-rbt-link a:focus,
-.db-rbt-link a:hover {
+a.db-rbt-button:active,
+a.db-rbt-button:focus,
+a.db-rbt-button:hover {
     border-color: #135e96;
     background: #135e96;
     text-decoration: none;
+}
+
+.db-rbt-description p {
+    color: #525d65;
+    font-size: 1.5em;
+    margin: .5em 0;
+}
+
+.db-rbt-link p {
+    color: #525d65;
+    font-size: 1.5em;
+}
+
+.db-rbt-error {
+    background: rgba(255,0,0,.2);
+}
+
+.db-rbt-success {
+    background: rgba(0,200,55,.2);
 }
 
 .db-rbt-admin .form-table {
@@ -47,6 +55,30 @@
     border-radius: 25px;
     background: rgba(255,255,255,.75);
     width: 100%;
+}
+
+.db-rbt-admin .form-table tr:first-child > :first-child {
+    -webkit-border-top-left-radius: 25px;
+    -moz-border-radius-topleft: 25px;
+    border-top-left-radius: 25px;
+}
+
+.db-rbt-admin .form-table tr:first-child > :last-child {
+    -webkit-border-top-right-radius: 25px;
+    -moz-border-radius-topright: 25px;
+    border-top-right-radius: 25px;
+}
+
+.db-rbt-admin .form-table tr:last-child > :first-child {
+    -webkit-border-bottom-left-radius: 25px;
+    -moz-border-radius-bottomleft: 25px;
+    border-bottom-left-radius: 25px;
+}
+
+.db-rbt-admin .form-table tr:last-child > :last-child {
+    -webkit-border-bottom-right-radius: 25px;
+    -moz-border-radius-bottomright: 25px;
+    border-bottom-right-radius: 25px;
 }
 
 .db-rbt-admin .form-table th,
