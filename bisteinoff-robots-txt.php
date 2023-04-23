@@ -3,7 +3,7 @@
 Plugin Name: DB Robots.txt 
 Plugin URI: https://github.com/bisteinoff/db-robotstxt
 Description: The plugin automatically creates a virtual file robots.txt including special rules for Google and Yandex. You can also add custom rules for Google, Yandex and any other robots or disable Yandex if you don't need it for search engines optimisation
-Version: 3.3
+Version: 3.3.1
 Author: Denis Bisteinov
 Author URI: https://bisteinoff.com/
 License: GPL2
@@ -32,7 +32,7 @@ License: GPL2
 	add_option('db_robots_custom_other');
 
 	add_action( 'admin_enqueue_scripts', function() {
-					wp_register_style('db-robotstxt-admin', '/wp-content/plugins/db-robotstxt/css/admin.min.css');
+					wp_register_style('db-robotstxt-admin', plugin_dir_url( __FILE__ ) . 'css/admin.min.css');
 					wp_enqueue_style( 'db-robotstxt-admin' );
 				},
 				99

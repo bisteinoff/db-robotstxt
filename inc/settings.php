@@ -96,8 +96,8 @@
 					<p class="td-rbt-field-description"><?php _e("If you want to replace it with the virtual file, you need to rename or delete the existing one" , 'robotstxt') ?></p>
 				</th>
 				<td class="db-rbt-error">
-					<a class="db-rbt-button" href="<?php echo $db_self ?>&action=rename">Rename to robots_old.txt</a>
-					<a class="db-rbt-button" href="<?php echo $db_self ?>&action=delete">Delete old robots.txt</a>
+					<a class="db-rbt-button" href="<?php echo $db_self ?>&action=rename"><?php _e('Rename to' , 'robotstxt') ?> robots_old.txt</a>
+					<a class="db-rbt-button" href="<?php echo $db_self ?>&action=delete"><?php _e('Delete old' , 'robotstxt') ?> robots.txt</a>
 				</td>
 			</tr>
 			<?php }
