@@ -42,7 +42,7 @@
 
 		if ( function_exists('current_user_can') &&
 			 !current_user_can('manage_options') )
-				die( _e('Error: You do not have the permission to update robots.txt file' , 'robotstxt') );
+				die( _e('Error: You do not have the permission to update robots.txt file' , 'db-robotstxt') );
 
 		if ( function_exists('check_admin_referrer') )
 			check_admin_referrer('db_robotstxt_form');
@@ -64,20 +64,20 @@
 
 <div class='wrap db-rbt-admin'>
 
-	<h1><?php _e('DB Robots.txt', 'robotstxt'); ?></h1>
+	<h1><?php _e('DB Robots.txt', 'db-robotstxt'); ?></h1>
 
 	<div class="db-rbt-description">
-		<p><?php _e("DB Robots.txt automatically creates a virtual file robots.txt including special rules for Google and Yandex.", 'robotstxt') ?></p>
-		<p><?php _e("You can also add custom rules for Google, Yandex and any other robots or disable Yandex if you don't need it for search engines optimisation.", 'robotstxt') ?></p>
+		<p><?php _e("DB Robots.txt automatically creates a virtual file robots.txt including special rules for Google and Yandex.", 'db-robotstxt') ?></p>
+		<p><?php _e("You can also add custom rules for Google, Yandex and any other robots or disable Yandex if you don't need it for search engines optimisation.", 'db-robotstxt') ?></p>
 	</div>
 
-	<h2><?php _e('Link', 'robotstxt'); ?></h2>
+	<h2><?php _e('Link', 'db-robotstxt'); ?></h2>
 
 	<div class="db-rbt-link">
-		<p><?php _e('You will find the file here:', 'robotstxt'); ?> <a class="db-rbt-button" href="/robots.txt" title="robots.txt"><?php echo site_url() ?>/robots.txt</a></p>
+		<p><?php _e('You will find the file here:', 'db-robotstxt'); ?> <a class="db-rbt-button" href="/robots.txt" title="robots.txt"><?php echo site_url() ?>/robots.txt</a></p>
 	</div>
 
-	<h2><?php _e('Settings', 'robotstxt'); ?></h2>
+	<h2><?php _e('Settings', 'db-robotstxt'); ?></h2>
 
 	<form name="db-robotstxt" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?page=db-robotstxt&amp;updated=true">
 
@@ -92,12 +92,12 @@
 			?>
 			<tr valign="top">
 				<th scope="row" class="db-rbt-error">
-					<p><?php _e('Attention!' , 'robotstxt') ?> <?php _e('File robots.txt already exists' , 'robotstxt') ?></p>
-					<p class="td-rbt-field-description"><?php _e("If you want to replace it with the virtual file, you need to rename or delete the existing one" , 'robotstxt') ?></p>
+					<p><?php _e('Attention!' , 'db-robotstxt') ?> <?php _e('File robots.txt already exists' , 'db-robotstxt') ?></p>
+					<p class="td-rbt-field-description"><?php _e("If you want to replace it with the virtual file, you need to rename or delete the existing one" , 'db-robotstxt') ?></p>
 				</th>
 				<td class="db-rbt-error">
-					<a class="db-rbt-button" href="<?php echo $db_self ?>&action=rename"><?php _e('Rename to' , 'robotstxt') ?> robots_old.txt</a>
-					<a class="db-rbt-button" href="<?php echo $db_self ?>&action=delete"><?php _e('Delete old' , 'robotstxt') ?> robots.txt</a>
+					<a class="db-rbt-button" href="<?php echo $db_self ?>&action=rename"><?php _e('Rename to' , 'db-robotstxt') ?> robots_old.txt</a>
+					<a class="db-rbt-button" href="<?php echo $db_self ?>&action=delete"><?php _e('Delete old' , 'db-robotstxt') ?> robots.txt</a>
 				</td>
 			</tr>
 			<?php }
@@ -109,9 +109,9 @@
 			<tr valign="top">
 				<th colspan="2" scope="row" class="db-rbt-success">
 					<p>
-						<?php _e('File robots.txt has been sucessfully renamed. Now the virtual robots.txt works fine.' , 'robotstxt') ?>
-						<?php _e('You can find the old robots.txt' , 'robotstxt') ?>
-						<a href="/robots_old.txt" target="_blank"><?php _e('here' , 'robotstxt') ?></a>
+						<?php _e('File robots.txt has been sucessfully renamed. Now the virtual robots.txt works fine.' , 'db-robotstxt') ?>
+						<?php _e('You can find the old robots.txt' , 'db-robotstxt') ?>
+						<a href="/robots_old.txt" target="_blank"><?php _e('here' , 'db-robotstxt') ?></a>
 					</p>
 				</th>
 			</tr>
@@ -121,7 +121,7 @@
 			?>
 			<tr valign="top">
 				<th colspan="2" scope="row" class="db-rbt-success">
-					<p><?php _e('File robots.txt has been sucessfully deleted. Now the virtual robots.txt works fine.' , 'robotstxt') ?></p>
+					<p><?php _e('File robots.txt has been sucessfully deleted. Now the virtual robots.txt works fine.' , 'db-robotstxt') ?></p>
 				</th>
 			</tr>
 			<?php }
@@ -129,8 +129,8 @@
 			?>
 			<tr valign="top">
 				<th scope="row" class="db-rbt-custom">
-					<p><?php _e('Regular basic rules') ?> <?php _e('for all search engines' , 'robotstxt') ?></p>
-					<p class="td-rbt-field-description"><?php _e('These directives will appear in robots.txt automatically for all User-agents' , 'robotstxt') ?></p>
+					<p><?php _e('Regular basic rules') ?> <?php _e('for all search engines' , 'db-robotstxt') ?></p>
+					<p class="td-rbt-field-description"><?php _e('These directives will appear in robots.txt automatically for all User-agents' , 'db-robotstxt') ?></p>
 				</th>
 				<td>
 					Disallow: /cgi-bin<br />
@@ -181,8 +181,8 @@
 			</tr>
 			<tr valign="top">
 				<th scope="row" class="db-rbt-custom">
-					<p><?php _e('Custom rules' , 'robotstxt') ?></p>
-					<p class="td-rbt-field-description"><?php _e('Add custom rules into your file robots.txt. They will appear in the block "User-agent: *" after the basic directives Disallow and Allow.' , 'robotstxt') ?></p>
+					<p><?php _e('Custom rules' , 'db-robotstxt') ?></p>
+					<p class="td-rbt-field-description"><?php _e('Add custom rules into your file robots.txt. They will appear in the block "User-agent: *" after the basic directives Disallow and Allow.' , 'db-robotstxt') ?></p>
 				</th>
 				<td>
 					<textarea id="custom_rules" name="custom_rules" rows="13" cols="100"><?php echo strip_tags($custom_rules); ?></textarea>
@@ -190,8 +190,8 @@
 			</tr>
 			<tr valign="top">
 				<th scope="row" class="db-rbt-custom">
-					<p><?php _e('Regular rules') ?> <?php _e('for Google only' , 'robotstxt') ?></p>
-					<p class="td-rbt-field-description"><?php _e('These directives will appear in robots.txt automatically in the block "User-agent: Googlebot" after the basic rules' , 'robotstxt') ?></p>
+					<p><?php _e('Regular rules') ?> <?php _e('for Google only' , 'db-robotstxt') ?></p>
+					<p class="td-rbt-field-description"><?php _e('These directives will appear in robots.txt automatically in the block "User-agent: Googlebot" after the basic rules' , 'db-robotstxt') ?></p>
 				</th>
 				<td>
 					Allow: */amp<br />
@@ -201,8 +201,8 @@
 			</tr>
 			<tr valign="top">
 				<th scope="row" class="db-rbt-custom">
-					<p><?php _e('Custom rules' , 'robotstxt') ?> <?php _e('for Google only' , 'robotstxt') ?></p>
-					<p class="td-rbt-field-description"><?php _e('Add custom rules into your file robots.txt. They will appear in the block "User-agent: Googlebot" after the basic directives Disallow and Allow.' , 'robotstxt') ?></p>
+					<p><?php _e('Custom rules' , 'db-robotstxt') ?> <?php _e('for Google only' , 'db-robotstxt') ?></p>
+					<p class="td-rbt-field-description"><?php _e('Add custom rules into your file robots.txt. They will appear in the block "User-agent: Googlebot" after the basic directives Disallow and Allow.' , 'db-robotstxt') ?></p>
 				</th>
 				<td>
 					<textarea id="custom_rules_google" name="custom_rules_google" rows="13" cols="100"><?php echo strip_tags($custom_rules_google); ?></textarea>
@@ -210,8 +210,8 @@
 			</tr>
 			<tr valign="top">
 				<th scope="row" class="db-rbt-custom">
-					<p><?php _e('Enable special rules for Yandex') ?></p>
-					<p class="td-rbt-field-description"><?php _e('You can disable the rules if the region of your website is not Russia, Belorussia, Kazakhstan or Ukraine where many people use Yandex as a search engine' , 'robotstxt') ?></p>
+					<p><?php _e('Enable special rules for Yandex' , 'db-robotstxt') ?></p>
+					<p class="td-rbt-field-description"><?php _e('You can disable the rules if the region of your website is not Russia, Belorussia, Kazakhstan or Ukraine where many people use Yandex as a search engine' , 'db-robotstxt') ?></p>
 				</th>
 				<td>
 					<input type="checkbox" id="if_yandex" name="if_yandex" <?php if ( $if_yandex === 'on') { ?>checked<?php } ?> >
@@ -219,8 +219,8 @@
 			</tr>
 			<tr valign="top">
 				<th scope="row" class="db-rbt-custom">
-					<p><?php _e('Regular rules') ?> <?php _e('for Yandex only' , 'robotstxt') ?></p>
-					<p class="td-rbt-field-description"><?php _e('These directives will appear in robots.txt automatically in the block "User-agent: Yandex" after the basic rules' , 'robotstxt') ?></p>
+					<p><?php _e('Regular rules') ?> <?php _e('for Yandex only' , 'db-robotstxt') ?></p>
+					<p class="td-rbt-field-description"><?php _e('These directives will appear in robots.txt automatically in the block "User-agent: Yandex" after the basic rules' , 'db-robotstxt') ?></p>
 				</th>
 				<td>
 					Disallow: */amp<br />
@@ -230,8 +230,8 @@
 			</tr>
 			<tr valign="top">
 				<th scope="row" class="db-rbt-custom">
-					<p><?php _e('Custom rules' , 'robotstxt') ?> <?php _e('for Yandex only' , 'robotstxt') ?></p>
-					<p class="td-rbt-field-description"><?php _e('Add custom rules into your file robots.txt. They will appear in the block "User-agent: Yandex" after the basic directives Disallow and Allow.' , 'robotstxt') ?></p>
+					<p><?php _e('Custom rules' , 'db-robotstxt') ?> <?php _e('for Yandex only' , 'db-robotstxt') ?></p>
+					<p class="td-rbt-field-description"><?php _e('Add custom rules into your file robots.txt. They will appear in the block "User-agent: Yandex" after the basic directives Disallow and Allow.' , 'db-robotstxt') ?></p>
 				</th>
 				<td>
 					<textarea id="custom_rules_yandex" name="custom_rules_yandex" rows="13" cols="100"><?php echo strip_tags($custom_rules_yandex); ?></textarea>
@@ -239,8 +239,8 @@
 			</tr>
 			<tr valign="top">
 				<th scope="row" class="db-rbt-custom">
-					<p><?php _e('Other custom rules' , 'robotstxt') ?></p>
-					<p class="td-rbt-field-description"><?php _e('Add custom rules into your file robots.txt. They will appear at the end of the file before Sitemap. Here you can add other necessary directives.' , 'robotstxt') ?></p>
+					<p><?php _e('Other custom rules' , 'db-robotstxt') ?></p>
+					<p class="td-rbt-field-description"><?php _e('Add custom rules into your file robots.txt. They will appear at the end of the file before Sitemap. Here you can add other necessary directives.' , 'db-robotstxt') ?></p>
 				</th>
 				<td>
 					<textarea id="custom_rules_other" name="custom_rules_other" rows="13" cols="100"><?php echo strip_tags($custom_rules_other); ?></textarea>
