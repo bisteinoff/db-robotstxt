@@ -3,9 +3,10 @@
 Plugin Name: DB Robots.txt 
 Plugin URI: https://github.com/bisteinoff/db-robotstxt
 Description: The plugin automatically creates a virtual file robots.txt including special rules for Google and Yandex. You can also add custom rules for Google, Yandex and any other robots or disable Yandex if you don't need it for search engines optimisation
-Version: 3.4.2
+Version: 3.5
 Author: Denis Bisteinov
 Author URI: https://bisteinoff.com/
+Text Domain: db-robotstxt
 License: GPL2
 */
 
@@ -25,6 +26,19 @@ License: GPL2
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+$if_multi_subcat = false; // if it is the main site of a multisite with subcategories (if true) we will want some special rules
+$if_publish = true; // if true than run the plugin
+
+// CHECK MULTISITE
+if ( is_multisite() && defined( 'SUBDOMAIN_INSTALL' ) )
+	if ( !SUBDOMAIN_INSTALL ) 
+		{
+			$if_multi_subcat = true;
+			if ( get_current_blog_id() !== get_main_site_id() ) $if_publish = false; // if the multisite uses subcategories we don't want a special robots.txt for each subdomain
+		}
+
+if ( $if_publish ) :
+
 	add_option('db_robots_custom');
 	add_option('db_robots_custom_google');
 	add_option('db_robots_if_yandex', 'on');
@@ -40,9 +54,11 @@ License: GPL2
 
 
 
-	function publish_robots_txt() {
+	function publish_robots_txt( $args ) {
 
 		// BASIC VARIABLES
+
+		$multi = ( $args[0] ? '*' : '' ); // used to change some rules for multisites
 
 		// Basic rules for all user-agents
 
@@ -50,17 +66,17 @@ License: GPL2
 
 			'Disallow' => array (
 				'/cgi-bin',
-				'/?',
-				'/wp-',
-				'/wp/',
+				$multi . '/?',
+				$multi . '/wp-',
+				$multi . '/wp/',
 				'*/admin/',
 				'*/login/',
 				'*?p=',
 				'*&p=',
 				'*?s=',
 				'*&s=',
-				'/search/',
-				'/trackback/',
+				$multi . '/search/',
+				$multi . '/trackback/',
 				'*/feed/',
 				'*/rss/',
 				'*/embed/',
@@ -74,26 +90,26 @@ License: GPL2
 				'*?*gclid='
 			),
 			'Allow' => array (
-				'/wp-*/uploads/',
-				'/wp-*.webp',
-				'/wp-*.avif',
-				'/wp-*.jpg',
-				'/wp-*.jpeg',
-				'/wp-*.gif',
-				'/wp-*.png',
-				'/wp-*.svg',
-				'/wp-*.js',
-				'/wp-*.css',
-				'/wp-*.doc',
-				'/wp-*.docx',
-				'/wp-*.xls',
-				'/wp-*.xlsx',
-				'/wp-*.ppt',
-				'/wp-*.ppts',
-				'/wp-*.pptx',
-				'/wp-*.pdf',
-				'/wp-*.txt',
-				'/wp-admin/admin-ajax.php'
+				$multi . '/wp-*/uploads/',
+				$multi . '/wp-*.webp',
+				$multi . '/wp-*.avif',
+				$multi . '/wp-*.jpg',
+				$multi . '/wp-*.jpeg',
+				$multi . '/wp-*.gif',
+				$multi . '/wp-*.png',
+				$multi . '/wp-*.svg',
+				$multi . '/wp-*.js',
+				$multi . '/wp-*.css',
+				$multi . '/wp-*.doc',
+				$multi . '/wp-*.docx',
+				$multi . '/wp-*.xls',
+				$multi . '/wp-*.xlsx',
+				$multi . '/wp-*.ppt',
+				$multi . '/wp-*.ppts',
+				$multi . '/wp-*.pptx',
+				$multi . '/wp-*.pdf',
+				$multi . '/wp-*.txt',
+				$multi . '/wp-admin/admin-ajax.php'
 			)
 		);
 
@@ -118,8 +134,8 @@ License: GPL2
 		$db_rules = array(
 
 			'Disallow' => array (
-				'/feed/turbo',
-				'/feed/zen'
+				$multi . '/feed/turbo',
+				$multi . '/feed/zen'
 			),
 			'Allow' => array (
 				'*/amp'
@@ -150,8 +166,8 @@ License: GPL2
 				'*/amp'
 			),
 			'Allow' => array (
-				'/feed/turbo',
-				'/feed/zen'
+				$multi . '/feed/turbo',
+				$multi . '/feed/zen'
 			)
 		);
 
@@ -252,12 +268,14 @@ License: GPL2
 		header('Status: 200 OK', true, 200);
 		header('Content-type: text/plain; charset=' . get_bloginfo('charset'));
 		echo $db_robots;
-		exit; 
+		exit;
 
 	} // end function
 
+	$args = array( $if_multi_subcat );
 	remove_action( 'do_robots', 'do_robots' );
-	add_action( 'do_robots', 'publish_robots_txt' );
+	add_action( 'do_robots', function() use ( $args ) { 
+               publish_robots_txt( $args ); } );
 
 
 
@@ -313,3 +331,5 @@ License: GPL2
 		return $links;
 
 	}
+
+endif;

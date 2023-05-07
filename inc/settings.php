@@ -1,6 +1,6 @@
 <?php // THE SETTINGS PAGE
 
-	$d = 'db-robotstxt';
+	$d = 'db-robotstxt'; // domain for translate.wordpress.org
 
 	$db_self = get_admin_url() . 'options-general.php?page=db-robotstxt';
 	$db_link = $_SERVER['DOCUMENT_ROOT'] . '/robots.txt';
