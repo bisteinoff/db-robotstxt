@@ -3,14 +3,14 @@
 Plugin Name: DB Robots.txt 
 Plugin URI: https://github.com/bisteinoff/db-robotstxt
 Description: The plugin automatically creates a virtual file robots.txt including special rules for Google and Yandex. You can also add custom rules for Google, Yandex and any other robots or disable Yandex if you don't need it for search engines optimisation
-Version: 3.5
+Version: 3.6
 Author: Denis Bisteinov
 Author URI: https://bisteinoff.com/
 Text Domain: db-robotstxt
 License: GPL2
 */
 
-/*  Copyright YEAR  PLUGIN_AUTHOR_NAME  (email : bisteinoff@gmail.com)
+/*  Copyright 2023  Denis BISTEINOV  (email : bisteinoff@gmail.com)
  
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
@@ -25,6 +25,11 @@ License: GPL2
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
+$thisdir = basename( __DIR__ );
+define( 'DB_PLUGIN_ROBOTSTXT_DIR', $thisdir );
 
 $if_multi_subcat = false; // if it is the main site of a multisite with subcategories (if true) we will want some special rules
 $if_publish = true; // if true than run the plugin
@@ -46,8 +51,8 @@ if ( $if_publish ) :
 	add_option('db_robots_custom_other');
 
 	add_action( 'admin_enqueue_scripts', function() {
-					wp_register_style('db-robotstxt-admin', plugin_dir_url( __FILE__ ) . 'css/admin.min.css');
-					wp_enqueue_style( 'db-robotstxt-admin' );
+					wp_register_style( DB_PLUGIN_ROBOTSTXT_DIR . '-admin', plugin_dir_url( __FILE__ ) . 'css/admin.min.css' );
+					wp_enqueue_style( DB_PLUGIN_ROBOTSTXT_DIR . '-admin' );
 				},
 				99
 	);
@@ -286,10 +291,10 @@ if ( $if_publish ) :
 		{
 
 			add_options_page(
-				'DB Robots.txt Settings',
-				'DB Robots.txt',
+				__( 'DB Robots.txt Settings' , DB_PLUGIN_ROBOTSTXT_DIR ),
+				__( 'DB Robots.txt' , DB_PLUGIN_ROBOTSTXT_DIR ),
 				'manage_options',
-				'db-robotstxt',
+				DB_PLUGIN_ROBOTSTXT_DIR,
 				'db_robotstxt_admin_settings'
 			);
 
@@ -310,14 +315,14 @@ if ( $if_publish ) :
 
 
 
-	add_filter( 'plugin_action_links_db-robotstxt/bisteinoff-robots-txt.php', 'db_settings_link' );
+	add_filter( 'plugin_action_links_' . DB_PLUGIN_ROBOTSTXT_DIR . '/bisteinoff-robots-txt.php', 'db_settings_link' );
 
 	function db_settings_link( $links )
 	{
 
 		$url = esc_url ( add_query_arg (
 			'page',
-			'db-robotstxt',
+			DB_PLUGIN_ROBOTSTXT_DIR,
 			get_admin_url() . 'options-general.php'
 		) );
 

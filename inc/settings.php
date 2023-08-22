@@ -1,14 +1,16 @@
 <?php // THE SETTINGS PAGE
 
-	$d = 'db-robotstxt'; // domain for translate.wordpress.org
+	if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-	$db_self = get_admin_url() . 'options-general.php?page=db-robotstxt';
+	$d = DB_PLUGIN_ROBOTSTXT_DIR; // domain for translate.wordpress.org
+
+	$db_self = get_admin_url() . 'options-general.php?page=' . $d;
 	$db_link = $_SERVER['DOCUMENT_ROOT'] . '/robots.txt';
 
 	if ( isset( $_GET['action'] ) )
 	{
 
-		$db_action = esc_html( $_GET['action'] );
+		$db_action = esc_html( sanitize_text_field ( $_GET['action'] ) );
 
 		switch ( $db_action )
 		{
@@ -33,11 +35,11 @@
 
 	}
 
-	$custom_rules = get_option('db_robots_custom');
+	$custom_rules        = get_option('db_robots_custom');
 	$custom_rules_google = get_option('db_robots_custom_google');
-	$if_yandex = get_option('db_robots_if_yandex');
+	$if_yandex           = get_option('db_robots_if_yandex');
 	$custom_rules_yandex = get_option('db_robots_custom_yandex');
-	$custom_rules_other = get_option('db_robots_custom_other');
+	$custom_rules_other  = get_option('db_robots_custom_other');
 
 	if ( isset( $_POST['submit'] ) )
 	{
@@ -49,16 +51,16 @@
 		if ( function_exists('check_admin_referrer') )
 			check_admin_referrer('db_robotstxt_form');
 
-		$custom_rules = esc_html($_POST['custom_rules']);
-		$custom_rules_google = esc_html($_POST['custom_rules_google']);
-		$if_yandex = esc_html($_POST['if_yandex']);
-		$custom_rules_yandex = esc_html($_POST['custom_rules_yandex']);
-		$custom_rules_other = esc_html($_POST['custom_rules_other']);
-		update_option('db_robots_custom', $custom_rules);
+		$custom_rules        = esc_html( sanitize_textarea_field ( $_POST['custom_rules'] ) );
+		$custom_rules_google = esc_html( sanitize_textarea_field ( $_POST['custom_rules_google'] ) );
+		$if_yandex           = esc_html( sanitize_text_field     ( $_POST['if_yandex'] ) );
+		$custom_rules_yandex = esc_html( sanitize_textarea_field ( $_POST['custom_rules_yandex'] ) );
+		$custom_rules_other  = esc_html( sanitize_textarea_field ( $_POST['custom_rules_other'] ) );
+		update_option('db_robots_custom',        $custom_rules);
 		update_option('db_robots_custom_google', $custom_rules_google);
-		update_option('db_robots_if_yandex', $if_yandex);
+		update_option('db_robots_if_yandex',     $if_yandex);
 		update_option('db_robots_custom_yandex', $custom_rules_yandex);
-		update_option('db_robots_custom_other', $custom_rules_other);
+		update_option('db_robots_custom_other',  $custom_rules_other);
 
 	}
 
@@ -76,12 +78,12 @@
 	<h2><?php _e( 'Link' , $d ); ?></h2>
 
 	<div class="db-rbt-link">
-		<p><?php _e( 'You will find the file here:', $d ); ?> <a class="db-rbt-button" href="/robots.txt" title="robots.txt"><?php echo site_url() ?>/robots.txt</a></p>
+		<p><?php _e( 'You will find the file here:', $d ); ?> <a class="db-rbt-button" href="/robots.txt" target="_blank" title="robots.txt"><?php echo site_url() ?>/robots.txt</a></p>
 	</div>
 
 	<h2><?php _e( 'Settings' , $d ); ?></h2>
 
-	<form name="db-robotstxt" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?page=db-robotstxt&amp;updated=true">
+	<form name="db-robotstxt" method="post" action="<?php echo esc_html ( $_SERVER['PHP_SELF'] ) ?>?page=<?php echo esc_html ( $d ) ?>&amp;updated=true">
 
 		<?php
 			if (function_exists ('wp_nonce_field') )

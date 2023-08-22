@@ -3,8 +3,8 @@ Contributors: Denis Bisteinov
 Donate link: https://bisteinoff.com
 Tags: robots, robots.txt, robots txt, robot, crawler, google, yandex, bing, seo, search engines, indexing
 Requires at least: 4.6
-Tested up to: 6.2
-Stable tag: 3.5
+Tested up to: 6.3
+Stable tag: 3.6
 License: GPL2
 
 DB Robots.txt automatically creates a virtual file robots.txt including special rules for Google and Yandex. You can also add custom rules for Google, Yandex and any other robots or disable Yandex if you don't need it for search engines optimisation.
@@ -32,6 +32,10 @@ If a physical robots.txt file exists on your site, WordPress won't process any r
 Out of the box, no. Because WordPress is in a sub-folder, it won't "know" when someone is requesting the robots.txt file which must be at the root of the site.
 
 == Changelog ==
+
+= 3.6 =
+* Compatible with Wordpress 6.3
+* Security issues
 
 = 3.5 =
 * Compatible with multisites
