@@ -3,7 +3,7 @@
 Plugin Name: DB Robots.txt 
 Plugin URI: https://github.com/bisteinoff/db-robotstxt
 Description: The plugin automatically creates a virtual file robots.txt including special rules for Google and Yandex. You can also add custom rules for Google, Yandex and any other robots or disable Yandex if you don't need it for search engines optimisation
-Version: 3.6
+Version: 3.7
 Author: Denis Bisteinov
 Author URI: https://bisteinoff.com/
 Text Domain: db-robotstxt
@@ -272,7 +272,7 @@ if ( $if_publish ) :
 
 		header('Status: 200 OK', true, 200);
 		header('Content-type: text/plain; charset=' . get_bloginfo('charset'));
-		echo $db_robots;
+		echo sanitize_textarea_field ( $db_robots );
 		exit;
 
 	} // end function
@@ -291,8 +291,8 @@ if ( $if_publish ) :
 		{
 
 			add_options_page(
-				__( 'DB Robots.txt Settings' , DB_PLUGIN_ROBOTSTXT_DIR ),
-				__( 'DB Robots.txt' , DB_PLUGIN_ROBOTSTXT_DIR ),
+				__( 'DB Robots.txt Settings' , 'db-robotstxt' ),
+				__( 'DB Robots.txt' , 'db-robotstxt' ),
 				'manage_options',
 				DB_PLUGIN_ROBOTSTXT_DIR,
 				'db_robotstxt_admin_settings'
