@@ -1,19 +1,25 @@
 === DB Robots.txt ===
-Contributors: Denis Bisteinov
+Contributors: bisteinoff
 Donate link: https://bisteinoff.com
-Tags: robots, robots.txt, robots txt, robot, crawler, google, yandex, bing, seo, search engines, indexing
+Tags: robots, robots.txt, crawler, google, seo
 Requires at least: 4.6
-Tested up to: 6.3
-Stable tag: 3.7
+Tested up to: 6.5
+Stable tag: 3.8.2
 License: GPL2
 
-DB Robots.txt automatically creates a virtual file robots.txt including special rules for Google and Yandex. You can also add custom rules for Google, Yandex and any other robots or disable Yandex if you don't need it for search engines optimisation.
+DB Robots.txt is an easy-to-use plugin for generating and configuring the file robots.txt that is essential for SEO (search engine optimization).
 
 == Description ==
 
-DB Robots.txt is an easy (i.e. automated) solution to creating and managing a robots.txt file for your site. It is easy to create a robots.txt without FTP access.
+Have you encountered an obstacle while creating and editing robots.txt file on your website?
+
+DB Robots.txt is an easy-to-use plugin for generating and configuring the file robots.txt that is essential for SEO (search engine optimization). The file should contain the rules for crawler robots of search engines such as Google, Bing, Yahoo!, Yandex, etc.
+
+The plugin works perfectly both if the file robots.txt has never been created or if it already exists. Once installed the plugin makes an optimized robots.txt file that includes special rules common for WordPress websites. After that you can proceed further customization specific for your own website if needed.
 
 If the plugin detects one or several Sitemap XML files it will include them into robots.txt file.
+
+No FTP access, manual coding or file editing is required that makes managing settings easy and convenient!
 
 == Installation ==
 
@@ -25,13 +31,31 @@ If the plugin detects one or several Sitemap XML files it will include them into
 
 = Will it conflict with any existing robots.txt file? =
 
-If a physical robots.txt file exists on your site, WordPress won't process any request for one, so there will be no conflict.
+No, it will not. If the file robots.txt is found in the root folder than it will not be overriden. On the Settings page it will appear the corresponding notification and you will find two options: remove or rename the existing file robots.txt. The plugin provides the functionality.
 
-= Will this work for sub-folder installations of WordPress? =
+=  Could I accidently block all search robots? =
 
-Out of the box, no. Because WordPress is in a sub-folder, it won't "know" when someone is requesting the robots.txt file which must be at the root of the site.
+Once the plugin is installed it will work fine for all search engine robots. If you are not aware of the rules for fine-tune of a robots.txt it is better to leave the file as is or read first a corresponding manual to learn more about the directives used for robots.txt.
+
+Note: the following directives would block the corresponding search robot(s):
+
+Disallow:
+Disallow: /
+Disallow: *
+Disallow: /*
+Disallow: */
+
+You should use any of the directives only in case if you do not want any page of your website would be accessible for crawling.
+
+=  Where I could read the up-to-date guide on robots.txt? =
+
+* [Guide by Google](https://developers.google.com/search/docs/crawling-indexing/robots/robots_txt)
+* [Guide WordPress SEO](https://wordpress.org/documentation/article/search-engine-optimization/#robots-txt-optimization)
 
 == Changelog ==
+
+= 3.8 =
+* Compatible with Wordpress 6.5
 
 = 3.7 =
 * Security issues
