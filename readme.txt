@@ -4,7 +4,7 @@ Donate link: https://bisteinoff.com
 Tags: robots, robots.txt, crawler, google, seo
 Requires at least: 4.6
 Tested up to: 6.5
-Stable tag: 3.8.2
+Stable tag: 3.9
 License: GPL2
 
 DB Robots.txt is an easy-to-use plugin for generating and configuring the file robots.txt that is essential for SEO (search engine optimization).
@@ -53,6 +53,9 @@ You should use any of the directives only in case if you do not want any page of
 * [Guide WordPress SEO](https://wordpress.org/documentation/article/search-engine-optimization/#robots-txt-optimization)
 
 == Changelog ==
+
+= 3.9 =
+* Security issues
 
 = 3.8 =
 * Compatible with Wordpress 6.5

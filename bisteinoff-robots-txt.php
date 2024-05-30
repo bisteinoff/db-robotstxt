@@ -3,14 +3,14 @@
 Plugin Name: DB Robots.txt 
 Plugin URI: https://github.com/bisteinoff/db-robotstxt
 Description: The plugin automatically creates a virtual file robots.txt including special rules for Google and Yandex. You can also add custom rules for Google, Yandex and any other robots or disable Yandex if you don't need it for search engines optimisation
-Version: 3.8.2
+Version: 3.9
 Author: Denis Bisteinov
 Author URI: https://bisteinoff.com/
 Text Domain: db-robotstxt
 License: GPL2
 */
 
-/*  Copyright 2023  Denis BISTEINOV  (email : bisteinoff@gmail.com)
+/*  Copyright 2024  Denis BISTEINOV  (email : bisteinoff@gmail.com)
  
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
@@ -30,6 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 $thisdir = basename( __DIR__ );
 define( 'DB_PLUGIN_ROBOTSTXT_DIR', $thisdir );
+define( 'DB_PLUGIN_ROBOTSTXT_VERSION', '3.9' );
 
 $if_multi_subcat = false; // if it is the main site of a multisite with subcategories (if true) we will want some special rules
 $if_publish = true; // if true than run the plugin
@@ -51,8 +52,7 @@ if ( $if_publish ) :
 	add_option('db_robots_custom_other');
 
 	add_action( 'admin_enqueue_scripts', function() {
-					wp_register_style( DB_PLUGIN_ROBOTSTXT_DIR . '-admin', plugin_dir_url( __FILE__ ) . 'css/admin.min.css' );
-					wp_enqueue_style( DB_PLUGIN_ROBOTSTXT_DIR . '-admin' );
+					wp_enqueue_style( DB_PLUGIN_ROBOTSTXT_DIR . '-admin', plugin_dir_url( __FILE__ ) . 'css/admin.min.css', [], DB_PLUGIN_ROBOTSTXT_VERSION, 'all' );
 				},
 				99
 	);
@@ -249,30 +249,30 @@ if ( $if_publish ) :
 		foreach( $db_check_files as $db_file ) {
 
 			$url = $host . '/' . $db_file;
-			$ch = curl_init ($url);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-			curl_setopt($ch, CURLOPT_HEADER, 1);
+			$ch = curl_init( $url );
+			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+			curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
+			curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1 );
+			curl_setopt( $ch, CURLOPT_HEADER, 1 );
 
-			$ch_output = curl_exec ($ch);
+			$ch_output = curl_exec( $ch );
 
-			if (curl_getinfo($ch)['http_code'] == 200)
-				$sitemap .= '\n'.'Sitemap: '.$url;
+			if ( curl_getinfo( $ch )[ 'http_code' ] == 200 )
+				$sitemap .= '\n'.'Sitemap: ' . $url;
 
-			curl_close($ch);
+			curl_close( $ch );
 
 		}
 
-		if ( !empty ($sitemap) )
+		if ( !empty( $sitemap ) )
 			$db_robots .= "\n\n\n" . $sitemap;
 
 
-		$db_robots = stripcslashes($db_robots);
+		$db_robots = stripcslashes( $db_robots );
 
-		header('Status: 200 OK', true, 200);
-		header('Content-type: text/plain; charset=' . get_bloginfo('charset'));
-		echo sanitize_textarea_field ( $db_robots );
+		header( 'Status: 200 OK', true, 200 );
+		header( 'Content-type: text/plain; charset=' . get_bloginfo( 'charset' ) );
+		echo esc_html( sanitize_textarea_field( $db_robots ) );
 		exit;
 
 	} // end function
@@ -284,15 +284,14 @@ if ( $if_publish ) :
 
 
 
-	function db_robots_admin()
-	{
+	function db_robots_admin() {
 
-		if ( function_exists('add_options_page') )
+		if ( function_exists( 'add_options_page' ) )
 		{
 
 			add_options_page(
-				__( 'DB Robots.txt Settings' , 'db-robotstxt' ),
-				__( 'DB Robots.txt' , 'db-robotstxt' ),
+				esc_html__( 'DB Robots.txt Settings', 'db-robotstxt' ),
+				esc_html__( 'DB Robots.txt', 'db-robotstxt' ),
 				'manage_options',
 				DB_PLUGIN_ROBOTSTXT_DIR,
 				'db_robotstxt_admin_settings'
@@ -306,10 +305,9 @@ if ( $if_publish ) :
 
 
 
-	function db_robotstxt_admin_settings()
-	{
+	function db_robotstxt_admin_settings() {
 
-		require_once('inc/settings.php');
+		require_once( 'inc/settings.php' );
 
 	}
 
@@ -317,10 +315,9 @@ if ( $if_publish ) :
 
 	add_filter( 'plugin_action_links_' . DB_PLUGIN_ROBOTSTXT_DIR . '/bisteinoff-robots-txt.php', 'db_settings_link' );
 
-	function db_settings_link( $links )
-	{
+	function db_settings_link( $links )	{
 
-		$url = esc_url ( add_query_arg (
+		$url = esc_url( add_query_arg(
 			'page',
 			DB_PLUGIN_ROBOTSTXT_DIR,
 			get_admin_url() . 'options-general.php'
