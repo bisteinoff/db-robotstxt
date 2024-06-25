@@ -169,6 +169,14 @@
 					Disallow: *?*yclid=<br />
 					Disallow: *?*ymclid=<br />
 					Disallow: *?*gclid=<br />
+					<?php
+						if ( defined( 'WC_VERSION' ) && class_exists( 'WooCommerce' ) ) :
+					?>
+					Disallow: *?*added=<br />
+					Disallow: *?*add-to-cart=<br />
+					<?php
+						endif;
+					?>
 					<br />
 					Allow: /wp-*/uploads/<br />
 					Allow: /wp-*.webp<br />

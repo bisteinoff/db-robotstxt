@@ -3,7 +3,7 @@
 Plugin Name: DB Robots.txt 
 Plugin URI: https://github.com/bisteinoff/db-robotstxt
 Description: The plugin automatically creates a virtual file robots.txt including special rules for Google and Yandex. You can also add custom rules for Google, Yandex and any other robots or disable Yandex if you don't need it for search engines optimisation
-Version: 3.9
+Version: 3.10
 Author: Denis Bisteinov
 Author URI: https://bisteinoff.com/
 Text Domain: db-robotstxt
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 $thisdir = basename( __DIR__ );
 define( 'DB_PLUGIN_ROBOTSTXT_DIR', $thisdir );
-define( 'DB_PLUGIN_ROBOTSTXT_VERSION', '3.9' );
+define( 'DB_PLUGIN_ROBOTSTXT_VERSION', '3.10' );
 
 $if_multi_subcat = false; // if it is the main site of a multisite with subcategories (if true) we will want some special rules
 $if_publish = true; // if true than run the plugin
@@ -67,9 +67,9 @@ if ( $if_publish ) :
 
 		// Basic rules for all user-agents
 
-		$db_rules = array(
+		$db_rules = [
 
-			'Disallow' => array (
+			'Disallow' => [
 				'/cgi-bin',
 				$multi . '/?',
 				$multi . '/wp-',
@@ -93,8 +93,8 @@ if ( $if_publish ) :
 				'*?*yclid=',
 				'*?*ymclid=',
 				'*?*gclid='
-			),
-			'Allow' => array (
+			],
+			'Allow' => [
 				$multi . '/wp-*/uploads/',
 				$multi . '/wp-*.webp',
 				$multi . '/wp-*.avif',
@@ -115,8 +115,15 @@ if ( $if_publish ) :
 				$multi . '/wp-*.pdf',
 				$multi . '/wp-*.txt',
 				$multi . '/wp-admin/admin-ajax.php'
-			)
-		);
+			]
+		];
+
+		if ( defined( 'WC_VERSION' ) && class_exists( 'WooCommerce' ) ) :
+
+			$db_rules[ 'Disallow' ][] = '*?*added=';
+			$db_rules[ 'Disallow' ][] = '*?*add-to-cart=';
+
+		endif;
 
 		$db_basic_rules = '';
 
@@ -272,7 +279,7 @@ if ( $if_publish ) :
 
 		header( 'Status: 200 OK', true, 200 );
 		header( 'Content-type: text/plain; charset=' . get_bloginfo( 'charset' ) );
-		echo esc_html( sanitize_textarea_field( $db_robots ) );
+		echo sanitize_textarea_field( $db_robots );
 		exit;
 
 	} // end function
