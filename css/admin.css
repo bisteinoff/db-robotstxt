@@ -2,11 +2,18 @@
 
 .db-rbt-admin h1 {
     font-size: 3em;
+    margin-left: 30px;
+    margin-bottom: .5em;
 }
 
 .db-rbt-admin h2 {
     font-size: 2em;
-    margin-top: 2em;
+    margin-top: .5em;
+}
+
+.db-logo {
+    float: right;
+    margin: 0 0 10px 20px;
 }
 
 a.db-rbt-button {
@@ -30,15 +37,44 @@ a.db-rbt-button:hover {
     text-decoration: none;
 }
 
+.db-rbt-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-block: .5em;
+    padding-block: .5em;
+}
+
+.db-rbt-header-col {
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    background: #fff;
+    width: 100%;
+}
+
+.db-rbt-header-col-inner {
+    padding: 30px;
+}
+
+.db-rbt-body {
+    margin-block: .5em;
+    padding-block: .5em;
+}
+
+.db-rbt-body > h2 {
+    margin-left: 30px;
+}
+
 .db-rbt-description p {
     color: #525d65;
-    font-size: 1.5em;
+    font-size: 1.35em;
     margin: .5em 0;
 }
 
 .db-rbt-link p {
     color: #525d65;
-    font-size: 1.5em;
+    font-size: 1.35em;
 }
 
 .db-rbt-error {
@@ -102,11 +138,29 @@ a.db-rbt-button:hover {
 }
 
 .db-rbt-admin .form-table textarea {
+    border-color: #ccc;
     margin: 15px 0;
+}
+
+.db-rbt-admin .form-table textarea:focus {
+    border-color: #eee;
+    box-shadow: 0 0 0 1px #2271b1;
 }
 
 .td-rbt-field-description {
     font-size: .9em;
     font-style: italic;
     font-weight: 400;
+}
+
+@media only screen and (min-width: 1200px) {
+
+    .db-rbt-header {
+        flex-direction: row-reverse;
+    }
+
+    .db-rbt-header-col {
+        width: calc(50% - 15px);
+    }
+    
 }
