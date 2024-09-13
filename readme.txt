@@ -4,7 +4,7 @@ Donate link: https://bisteinoff.com
 Tags: robots, robots.txt, crawler, google, seo
 Requires at least: 4.6
 Tested up to: 6.6
-Stable tag: 3.11
+Stable tag: 3.11.1
 License: GPL2
 
 DB Robots.txt is an easy-to-use plugin for generating and configuring the file robots.txt that is essential for SEO (search engine optimization).
@@ -121,3 +121,11 @@ You should use any of the directives only in case if you do not want any page of
 
 = 1.0 =
 * Initial release.
+
+== Screenshots ==
+
+1. The Settings Page.
+
+2. Error message if a non-virtual file robots.txt exists and the functionality to fix it.
+
+3. The message when the problem is fixed.

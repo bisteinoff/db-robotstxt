@@ -2,7 +2,7 @@
 
 	if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-	$d = DB_PLUGIN_ROBOTSTXT_DIR; // domain for translate.wordpress.org
+	$d = DB_PLUGIN_ROBOTSTXT_DIR;
 
 	$db_self = get_admin_url() . 'options-general.php?page=' . $d;
 	$db_link = $_SERVER['DOCUMENT_ROOT'] . '/robots.txt';
