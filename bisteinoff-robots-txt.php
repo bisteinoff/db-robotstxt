@@ -3,14 +3,14 @@
 Plugin Name: DB Robots.txt 
 Plugin URI: https://github.com/bisteinoff/db-robotstxt
 Description: The plugin automatically creates a virtual file robots.txt including special rules for Google and Yandex. You can also add custom rules for Google, Yandex and any other robots or disable Yandex if you don't need it for search engines optimisation
-Version: 3.11.1
+Version: 3.12
 Author: Denis Bisteinov
 Author URI: https://bisteinoff.com/
 Text Domain: db-robotstxt
 License: GPL2
 */
 
-/*  Copyright 2024  Denis BISTEINOV  (email : bisteinoff@gmail.com)
+/*  Copyright 2025  Denis BISTEINOV  (email : bisteinoff@gmail.com)
  
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 $thisdir = basename( __DIR__ );
 define( 'DB_PLUGIN_ROBOTSTXT_DIR', $thisdir );
-define( 'DB_PLUGIN_ROBOTSTXT_VERSION', '3.11.1' );
+define( 'DB_PLUGIN_ROBOTSTXT_VERSION', '3.12' );
 
 $if_multi_subcat = false; // if it is the main site of a multisite with subcategories (if true) we will want some special rules
 $if_publish = true; // if true than run the plugin
@@ -45,11 +45,11 @@ if ( is_multisite() && defined( 'SUBDOMAIN_INSTALL' ) )
 
 if ( $if_publish ) :
 
-	add_option('db_robots_custom');
-	add_option('db_robots_custom_google');
-	add_option('db_robots_if_yandex', 'on');
-	add_option('db_robots_custom_yandex');
-	add_option('db_robots_custom_other');
+	add_option( 'db_robots_custom' );
+	add_option( 'db_robots_custom_google' );
+	add_option( 'db_robots_if_yandex', 'on' );
+	add_option( 'db_robots_custom_yandex' );
+	add_option( 'db_robots_custom_other' );
 
 	add_action( 'admin_enqueue_scripts', function() {
 					wp_enqueue_style( DB_PLUGIN_ROBOTSTXT_DIR . '-admin', plugin_dir_url( __FILE__ ) . 'css/admin.min.css', [], DB_PLUGIN_ROBOTSTXT_VERSION, 'all' );
@@ -233,18 +233,6 @@ if ( $if_publish ) :
 
 		// SITEMAP
 
-		// Checking the host
-
-		if ( ( !empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] != 'off' ) || $_SERVER['SERVER_PORT'] == 443 ) {
-			$protocol = 'https://';
-			$host = 'https://' . $_SERVER['HTTP_HOST'];
-		}
-		else { 
-			$protocol = 'http://';
-			$host = $_SERVER['HTTP_HOST'];
-		}
-
-		// checking if XML sitemap files exist
 		$sitemap = '';
 		$db_check_files = array(
 			'sitemap.xml',
@@ -255,19 +243,27 @@ if ( $if_publish ) :
 
 		foreach( $db_check_files as $db_file ) {
 
-			$url = $host . '/' . $db_file;
-			$ch = curl_init( $url );
-			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-			curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
-			curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1 );
-			curl_setopt( $ch, CURLOPT_HEADER, 1 );
+			$url = esc_url( get_site_url() ) . '/' . $db_file;
 
-			$ch_output = curl_exec( $ch );
+			$response = wp_remote_get( $url, [
+				'timeout'     => 15,
+				'sslverify'   => false,
+				'redirection' => 5,
+				'headers'     => [ 'Accept' => 'application/xml' ],
+			]);
 
-			if ( curl_getinfo( $ch )[ 'http_code' ] == 200 )
-				$sitemap .= '\n'.'Sitemap: ' . $url;
+			if ( is_array( $response ) && !is_wp_error( $response ) ) :
 
-			curl_close( $ch );
+				$status_code = wp_remote_retrieve_response_code( $response );
+
+				if ( $status_code === 200 ) :
+
+					$sitemap .= '\n' . 'Sitemap: ' . $url;
+
+				endif;
+
+			endif;
+
 
 		}
 
@@ -282,7 +278,7 @@ if ( $if_publish ) :
 		echo sanitize_textarea_field( $db_robots );
 		exit;
 
-	} // end function
+	}
 
 	$args = array( $if_multi_subcat );
 	remove_action( 'do_robots', 'do_robots' );
@@ -330,7 +326,7 @@ if ( $if_publish ) :
 			get_admin_url() . 'options-general.php'
 		) );
 
-		$settings_link = "<a href='$url'>" . __( 'Settings' ) . '</a>';
+		$settings_link = "<a href='$url'>" . __( 'Settings', 'db-robotstxt' ) . '</a>';
 
 		array_push(
 			$links,

@@ -5,14 +5,14 @@
 	$d = DB_PLUGIN_ROBOTSTXT_DIR;
 
 	$db_self = get_admin_url() . 'options-general.php?page=' . $d;
-	$db_link = $_SERVER['DOCUMENT_ROOT'] . '/robots.txt';
+	$db_link = ABSPATH . 'robots.txt';
 
 	$nonce = wp_create_nonce( $d );
 
 	if ( !empty( $nonce ) )
 		$nonce_GET = '&' . $d . '_nonce=' . $nonce;
 
-	if ( isset( $_GET['action'] ) && 
+	if ( isset( $_GET[ 'action' ] ) && 
 		 isset( $_GET[ $d . '_nonce' ] ) &&
 		 wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET[ $d . '_nonce' ] ) ), sanitize_text_field( $d ) ) ) :
 
@@ -22,26 +22,52 @@
 
 		$db_deleted = false;
 		$db_renamed = false;
-		$db_action = esc_html( sanitize_text_field ( $_GET['action'] ) );
+		$db_action = esc_html( sanitize_text_field( wp_unslash( $_GET[ 'action' ] ) ) );
 
 		switch ( $db_action ) :
 
 			case 'rename':
-				rename( $db_link , $_SERVER['DOCUMENT_ROOT'] . '/robots_old.txt' );
-				wp_redirect( $db_self . '&action=renamed' . $nonce_GET );
+
+				if ( !function_exists( 'get_filesystem_method' ) ) {
+					require_once( ABSPATH . 'wp-admin/includes/file.php' );
+				}
+
+				$method = get_filesystem_method();
+				if ( 'direct' === $method ) {
+					WP_Filesystem();
+				}
+
+				if ( !is_wp_error( $GLOBALS['wp_filesystem']->move( $db_link, ABSPATH . 'robots_old.txt' ) ) ) {
+					wp_redirect( $db_self . '&action=renamed' . $nonce_GET );
+				} else {
+					wp_redirect( $db_self );
+				}
+
 				break;
+
 			case 'renamed':
+
 				$db_renamed = true;
+
 				break;
+
 			case 'delete':
+
 				wp_delete_file( $db_link );
 				wp_redirect( $db_self . '&action=deleted' . $nonce_GET );
+
 				break;
+
 			case 'deleted':
+
 				$db_deleted = true;
+
 				break;
+
 			default:
+
 				wp_redirect( $db_self );
+
 				break;
 
 		endswitch;
@@ -54,7 +80,7 @@
 	$custom_rules_yandex = get_option( 'db_robots_custom_yandex' );
 	$custom_rules_other  = get_option( 'db_robots_custom_other'  );
 
-	if ( isset( $_POST['submit'] ) && 
+	if ( isset( $_POST[ 'submit' ] ) && 
 		 isset( $_POST[ $d . '_nonce' ] ) &&
 		 wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST[ $d . '_nonce' ] ) ), sanitize_text_field( $d ) ) ) :
 
@@ -62,17 +88,31 @@
 			 !current_user_can( 'manage_options' ) )
 				die( esc_html_e( 'Error: You do not have the permission to update robots.txt file', 'db-robotstxt' ) );
 
-		$custom_rules        = esc_html( sanitize_textarea_field( $_POST['custom_rules']        ) );
-		$custom_rules_google = esc_html( sanitize_textarea_field( $_POST['custom_rules_google'] ) );
-		$if_yandex           = esc_html( sanitize_text_field    ( $_POST['if_yandex']           ) );
-		$custom_rules_yandex = esc_html( sanitize_textarea_field( $_POST['custom_rules_yandex'] ) );
-		$custom_rules_other  = esc_html( sanitize_textarea_field( $_POST['custom_rules_other']  ) );
+		if ( isset( $_POST[ 'custom_rules' ] ) ) :
+			$custom_rules = esc_html( sanitize_textarea_field( wp_unslash( $_POST[ 'custom_rules' ] ) ) );
+			update_option( 'db_robots_custom', $custom_rules );
+		endif;
 
-		update_option( 'db_robots_custom',        $custom_rules        );
-		update_option( 'db_robots_custom_google', $custom_rules_google );
-		update_option( 'db_robots_if_yandex',     $if_yandex           );
-		update_option( 'db_robots_custom_yandex', $custom_rules_yandex );
-		update_option( 'db_robots_custom_other',  $custom_rules_other  );
+		if ( isset( $_POST[ 'custom_rules_google' ] ) ) :
+			$custom_rules_google = esc_html( sanitize_textarea_field( wp_unslash( $_POST[ 'custom_rules_google' ] ) ) );
+			update_option( 'db_robots_custom_google', $custom_rules_google );
+		endif;
+
+		if ( isset( $_POST[ 'if_yandex' ] ) ) :
+			$if_yandex = esc_html( sanitize_text_field( wp_unslash( $_POST[ 'if_yandex' ] ) ) );
+			update_option( 'db_robots_if_yandex', $if_yandex );
+		endif;
+
+		if ( isset( $_POST[ 'custom_rules_yandex' ] ) ) :
+			$custom_rules_yandex = esc_html( sanitize_textarea_field( wp_unslash( $_POST[ 'custom_rules_yandex' ] ) ) );
+			update_option( 'db_robots_custom_yandex', $custom_rules_yandex );
+		endif;
+
+		if ( isset( $_POST[ 'custom_rules_other' ] ) ) :
+			$custom_rules_other = esc_html( sanitize_textarea_field( wp_unslash( $_POST[ 'custom_rules_other' ] ) ) );
+			update_option( 'db_robots_custom_other',  $custom_rules_other  );
+		endif;
+
 
 	endif;
 
@@ -123,7 +163,7 @@
 
 		<h2><?php esc_html_e( 'Settings', 'db-robotstxt' ); ?></h2>
 
-		<form name="db-robotstxt" method="post" action="<?php echo esc_html( sanitize_text_field( $_SERVER['PHP_SELF'] ) ) ?>?page=<?php echo esc_html( sanitize_text_field( $d ) ) ?>&amp;updated=true">
+		<form name="db-robotstxt" method="post" action="?page=<?php echo esc_html( sanitize_text_field( $d ) ) ?>&amp;updated=true">
 
 			<table class="form-table">
 				<?php
